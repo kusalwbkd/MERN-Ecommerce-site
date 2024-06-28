@@ -6,7 +6,7 @@ import { ReviewSection } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '../features/cart/cartSlice';
 import { toast } from 'react-toastify';
-import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
+import { BsStar, BsStarFill, BsStarHalf, BsTypeH3 } from 'react-icons/bs';
 
 
 
@@ -181,32 +181,45 @@ return(
             )
               })}
             </div>
-            <div className='form-control w-full max-w-xs'>
-            <label className='label'>
-              <h4 className='text-md font-medium tracking-wider capitalize'>
-                amount
-              </h4>
-            </label>
 
-            <select
-              className='select select-secondary select-bordered select-md'
-              value={amount}
-              name='amount'
-              onChange={handleAmount}
-            >
-             {generateAmountOptions(product.inventory)}
-            </select>
-              </div>
+            {product.inventory<1 ? (
+              <></>
+            ):(
+              <div className='form-control w-full max-w-xs'>
+              <label className='label'>
+                <h4 className='text-md font-medium tracking-wider capitalize'>
+                  amount
+                </h4>
+              </label>
+  
+              <select
+    className='select select-secondary select-bordered select-md'
+    value={amount}
+    name='amount'
+    onChange={handleAmount}
+  >
+   {generateAmountOptions(product.inventory)}
+  </select>
+                </div>
+            )}
+           
 
               <div className="mt-10">
-              <button className='btn btn-secondary btn-md' onClick={addToCart}>
-              Add to bag
-            </button>
+
+                {product.inventory<1 ?(
+                 <h3 className=' text-xl font-semibold text-red-600'>Out of Stock</h3>
+                ):(
+                  <button className='btn btn-secondary btn-md' onClick={addToCart}>
+                  Add to bag
+                </button>
+                )}
+            
               </div>
          </div>
         </div>
-
-        <div className="card w-96 max-h-96 bg-base-100 shadow-xl">
+{/* <div className=' grid grid-cols-12 w-full'>
+  <div className=' grid col-span-4 border border-red-400'>
+  <div className="card w-96 max-h-96 bg-base-100 shadow-xl">
  
   <div className="card-body">
     <h2 className="card-title">Add your review</h2>
@@ -282,7 +295,17 @@ return(
   </div>
        </div>
 
-<ReviewSection/>
+  </div>
+
+  <div className=' grid col-span-8 border border-blue-400'>
+  <ReviewSection/>
+  </div>
+
+</div> */}
+      
+<div>
+
+</div>
    
   </div>
     </section>

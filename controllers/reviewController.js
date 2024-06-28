@@ -3,11 +3,23 @@ import { BadRequestError, NotFoundError } from "../erros/customError.js";
 import Product from "../models/Product.js";
 import Review from "../models/Review.js";
 import { checkPermissions } from "../utils/checkPermissions.js";
+import mongoose from "mongoose";
+import Notification from "../models/Notification.js";
 
 export const createReview =async(req,res)=>{
    
       req.body.user = req.user.userId;
       const review = await Review.create(req.body);
+      const userIdString = '664397dd5059a25a98080c1c';
+      const userId =new mongoose.Types.ObjectId(userIdString);
+      const newNotification = new Notification({
+        type: "review",
+        from: req.user.userId,
+        to:userId
+        
+    });
+
+    await newNotification.save();
       res.status(StatusCodes.CREATED).json({ review });
 }
 

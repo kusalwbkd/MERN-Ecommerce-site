@@ -48,14 +48,19 @@ const ReviewSection = () => {
 
            
 return(
+  <div className='border border-black mb-2'>
   <div className='mx-auto max-w-xl text-left mb-5' key={idx}>
-  <p className=' font-bold'>{item?.user?.name}</p>
+    <div className='flex items-center  justify-start'> 
+    <p className=' font-bold'>{item?.user?.name}</p>
   <div className=' flex mt-5'>
   {generateStars}
   </div>
+    </div>
+  
   <p className='mt-10'>
     {item.comment}
   </p>
+</div> 
 </div>
 )
         })}

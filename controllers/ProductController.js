@@ -5,6 +5,7 @@ import cloudinary from 'cloudinary';
 import { NotFoundError } from "../erros/customError.js";
 import Review from "../models/Review.js";
 import mongoose from "mongoose";
+import Notification from "../models/Notification.js";
 
 export const createProduct=async(req,res)=>{
 
@@ -15,6 +16,9 @@ export const createProduct=async(req,res)=>{
         req.body.imagePublicId = response.public_id;
       req.body.user=req.user.userId;
    const product=await Product.create(req.body)
+
+  
+
    res.status(StatusCodes.OK).json({product})
 }
 
@@ -79,13 +83,27 @@ export const getSingleProduct=async(req,res)=>{
    const{id:productId}=req.params
 
    const product=await Product.findById(productId).populate("reviews")
+   
   const reviews=await Review.find({product:productId}).populate({path:'user',select:'name'})
 
    if(!product){
     throw new NotFoundError(`No product with ${productId}`)
    }
-
-   res.status(StatusCodes.OK).json({product,reviews})
+   const productName = product.name;
+   const userIdString = '664397dd5059a25a98080c1c';
+   const userId =new mongoose.Types.ObjectId(userIdString);
+   if(product.inventory<1){
+      const newNotification = new Notification({
+         type: "stockout",
+         from:userId,
+         to:userId,
+         message:`The product ${productName} is out of Stock`
+         
+     });
+     await newNotification.save();
+   }
+  
+   res.status(StatusCodes.OK).json({product,reviews,productName})
 }
 export const updateProduct=async(req,res)=>{
    const{id:productId}=req.params
