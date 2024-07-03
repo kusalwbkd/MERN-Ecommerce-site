@@ -105,6 +105,25 @@ export const validateUpdateUserInput =withValidationErrors([
 body('location').optional(),
 body('lastName').optional(),
 ])
+
+export const validateUpdateUserPasswordInput =withValidationErrors([
+ 
+  body('oldPassword')
+  .notEmpty().withMessage('please provide your old password')
+  .custom(async (oldPassword, { req }) => {
+    const oldUser = await User.findById(req.user.userId);
+    const isPasswordMatch = await comparePassword(oldPassword, oldUser.password);
+    if (!isPasswordMatch) {
+      throw new BadRequestError('Passwords do not match');
+    }
+  }),
+  body('password')
+  .notEmpty().withMessage('Please provide your new password')
+  .isLength({ min: 6 })
+  .withMessage('password must be at least 6 characters long'),
+
+
+])
 //validate products
 
 export const validateProductInput=withValidationErrors([

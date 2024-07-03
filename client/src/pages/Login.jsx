@@ -17,7 +17,7 @@ export const action=(store)=>async({request})=>{
     toast.success('logged in successfully');
     return redirect('/');
   } catch (error) {
-    console.log(error);
+  
     const errorMessage =
     error?.response?.data?.error?.message ||
     'please double check your credentials';
@@ -33,26 +33,28 @@ export const action=(store)=>async({request})=>{
 const Login = () => {
   return (
     <section className='h-screen grid place-items-center'>
-    <Form method='post' className='card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4' >
+    <Form method='post' className='card w-[30rem] p-8 bg-base-100 shadow-lg flex flex-col gap-y-4' >
+
+      <h3>Use these values as credentials or just click Login button</h3>
+      <p>email:{''}userdb@gmail.com</p>
+      <p>password:{''}password</p>
     <h4 className='text-center text-3xl font-bold'>Login</h4>
         <FormInput
           type='email'
           label='email'
           name='email'
-          defaultValue='test@test.com'
+          defaultValue='userdb@gmail.com'
         />
         <FormInput
           type='password'
           label='password'
           name='password'
-          defaultValue='secret'
+          defaultValue='password'
         />
         <div className='mt-4'>
-        <SubmitBtn text='login' />
+        <SubmitBtn text='Login' />
         </div>
-        <button type='button' className='btn btn-secondary btn-block'>
-          guest user
-        </button>
+        
         <p className='text-center'>
           Not a member yet?
           <Link

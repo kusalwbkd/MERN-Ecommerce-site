@@ -89,21 +89,9 @@ export const getSingleProduct=async(req,res)=>{
    if(!product){
     throw new NotFoundError(`No product with ${productId}`)
    }
-   const productName = product.name;
-   const userIdString = '664397dd5059a25a98080c1c';
-   const userId =new mongoose.Types.ObjectId(userIdString);
-   if(product.inventory<1){
-      const newNotification = new Notification({
-         type: "stockout",
-         from:userId,
-         to:userId,
-         message:`The product ${productName} is out of Stock`
-         
-     });
-     await newNotification.save();
-   }
   
-   res.status(StatusCodes.OK).json({product,reviews,productName})
+  
+   res.status(StatusCodes.OK).json({product,reviews})
 }
 export const updateProduct=async(req,res)=>{
    const{id:productId}=req.params

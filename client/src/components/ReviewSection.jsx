@@ -26,16 +26,16 @@ const ReviewSection = () => {
     <div className="card-body text-center">
       <h2 className="card-title">Review of the product</h2>
       <div class="divide-y divide-slate-200 ...">
-        {displayedReviews.map((item,idx)=>{
+        {displayedReviews?.map((item,idx)=>{
        const generateStars=Array.from({length:5},(_,index)=>{
         const number=index+0.5
         
         return(
           <span key={index}>
-          {item.rating >= index+1 ? (
+          {item?.rating >= index+1 ? (
             <BsStarFill className=' text-orange-500'/>
            
-          ) : item.rating >= number ? (
+          ) : item?.rating >= number ? (
             <BsStarHalf className=' text-orange-500'/>
 
           ) : (

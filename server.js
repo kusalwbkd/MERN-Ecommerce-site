@@ -12,6 +12,7 @@ import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import authRouter from './routes/authRouter.js';
 import reviewRouter from './routes/reviewRouter.js';
 import userRouter from './routes/userRoutes.js';
+import salesRouter from './routes/salesRouter.js'
 import orderRouter from './routes/OrderRouter.js';
 import  notificationRouter from  './routes/noficationRouter.js'
 import cookieParser from 'cookie-parser';
@@ -43,6 +44,7 @@ app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/users', authenticateUser, userRouter);
 app.use('/api/v1/orders', authenticateUser, orderRouter);
 app.use('/api/v1/notifications', authenticateUser, notificationRouter);
+app.use('/api/v1/sales', authenticateUser, salesRouter);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

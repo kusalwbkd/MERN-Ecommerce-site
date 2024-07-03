@@ -3,6 +3,8 @@ import User from "../models/User.js"
 import { checkPermissions } from "../utils/checkPermissions.js"
 import { BadRequestError } from "../erros/customError.js"
 import { hashPassword } from "../utils/passwordUtils.js"
+import cloudinary from 'cloudinary';
+import { formatImage } from "../middleware/multerMiddleware.js"
 
 export const getAllUsers=async(req,res)=>{
     const users=await User.find({})
@@ -21,30 +23,35 @@ export const showMe=async(req,res)=>{
 }
 
 export const updateUser=async(req,res)=>{
-    const{email,newpassword,oldPassword,location,lastName}=req.body
-    const user=await User.findById(req.user.userId)
-    checkPermissions(req.user,user.user)
+    
+      if(req.file){
+        const file = formatImage(req.file);
+        const response = await cloudinary.v2.uploader.upload(file);
+        req.body.avatar = response.secure_url;
+        req.body.avatarPublicId = response.public_id;
+       }
+       const user=await User.findOneAndUpdate({_id:req.user.userId},req.body,{
+        new:true,
+       
+      })
+       if (req.file && user.imagePublicId) {
+        await cloudinary.v2.uploader.destroy(user.avatarPublicId);
+      }
 
-    if(newpassword && !oldPassword){
-    throw new BadRequestError('please provide the old password')
-    }
+      res.status(StatusCodes.OK).json({msg:'User updated!!!'})
+       
+}
 
-    if(!newpassword && oldPassword){
-        throw new BadRequestError('please provide the new password')
-    }
+export const updateUserPassword=async(req,res)=>{
+       
 
-    if(newpassword){
-        const hashedPassword=await hashPassword(newpassword)
-     
-        user.password=hashedPassword;
-        await user.save()
+        const hashedPassword=await hashPassword(req.body.password)
+     req.body.password=hashedPassword
+        await User.findOneAndUpdate({_id:req.user.userId},req.body,{
+            new:true,
+           
+          })
         res.status(StatusCodes.OK).json({msg:'Password changed !!!'})
-    }
-    user.location = location || user.location;
-		user.email = email || user.email;
-		user.lastName = lastName || user.lastName;
-		await user.save()
-
-        user.password=null
-        res.status(StatusCodes.OK).json({user})
+    
+     
 }

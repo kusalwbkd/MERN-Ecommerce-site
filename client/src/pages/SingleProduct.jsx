@@ -9,13 +9,18 @@ import { toast } from 'react-toastify';
 import { BsStar, BsStarFill, BsStarHalf, BsTypeH3 } from 'react-icons/bs';
 
 
+const singleProductQuery = (id) => {
+  return {
+    queryKey: ['singleProduct', id],
+    queryFn: () => customFetch.get(`/products/${id}`),
+  };
+};
 
+export const loader=(queryClient)=>async({params})=>{
 
-export const loader=async({params})=>{
-
-const response=await customFetch.get(`/products/${params.id}`)
-const product=response.data.product;
-const reviews=response.data.reviews
+const response=await queryClient.ensureQueryData(singleProductQuery(params.id))
+const product=response?.data?.product;
+const reviews=response?.data?.reviews
 return {product,reviews}
 }
 
@@ -62,7 +67,7 @@ const user=useSelector((state)=>state.userState.user)
   const handleAmount = (e) => {
     setAmount(parseInt(e.target.value));
   };
-const reviewedProduct=reviews?.find((item)=>item.user === user?._id)
+const reviewedProduct=reviews?.find((item)=>item?.user === user?._id)
 
 const[selectedStarCount,setSelectedStarCount]=useState(reviewedProduct?.rating)
 const cartProduct={
@@ -152,7 +157,7 @@ return(
        
        
           <h4 className='text-xl text-neutral-content font-bold mt-2'>
-            {company}
+            {company||""}
           </h4>
 
           <p className='mt-3 text-xl'>{dollarsAmount}</p>
@@ -165,7 +170,7 @@ return(
             </h4>
 
             <div className="mt-2">
-              {colors.map((color)=>{
+              {colors?.map((color)=>{
             return(
               <button
               key={color}
@@ -182,7 +187,7 @@ return(
               })}
             </div>
 
-            {product.inventory<1 ? (
+            {product?.inventory<1 ? (
               <></>
             ):(
               <div className='form-control w-full max-w-xs'>
@@ -198,7 +203,7 @@ return(
     name='amount'
     onChange={handleAmount}
   >
-   {generateAmountOptions(product.inventory)}
+   {generateAmountOptions(product?.inventory)}
   </select>
                 </div>
             )}
@@ -206,7 +211,7 @@ return(
 
               <div className="mt-10">
 
-                {product.inventory<1 ?(
+                {product?.inventory<1 ?(
                  <h3 className=' text-xl font-semibold text-red-600'>Out of Stock</h3>
                 ):(
                   <button className='btn btn-secondary btn-md' onClick={addToCart}>

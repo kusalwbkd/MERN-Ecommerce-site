@@ -5,7 +5,7 @@ import { formatPrice } from '../utils'
 const CartTotals = () => {
 
     const{cartTotal,orderTotal,tax,totalShippingCost}=useSelector((state)=>state.cartState)
-    console.log(totalShippingCost);
+  
   return (
     <div className='card bg-base-200'>
         <div className="card-body">

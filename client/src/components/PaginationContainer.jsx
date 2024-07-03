@@ -37,7 +37,7 @@ return null
         }>
      Prev
       </button>
-{pages.map((page)=>{
+{pages?.map((page)=>{
  return <button key={page} className={`btn btn-xs md:btn-md join-item ${page === currentPage ?' bg-base-300 border-base-300':''}`} 
  
  onClick={()=>hadlePageNumber(page)}

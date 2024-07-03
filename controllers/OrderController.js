@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import Stripe from "stripe";
 import Notification from "../models/Notification.js";
 import mongoose from "mongoose";
+import Sale from "../models/Sales.js";
 
 
 
@@ -14,7 +15,8 @@ export const createOrder =async(req,res)=>{
     
    const{cartItems,totalShippingCost:shippingFee,tax}=req.body
   
-  
+   const userIdString = '664397dd5059a25a98080c1c';
+   const userId =new mongoose.Types.ObjectId(userIdString);
     if(!cartItems || cartItems.length <1){
     throw new BadRequestError('No cart item provided')
     }
@@ -33,6 +35,17 @@ export const createOrder =async(req,res)=>{
          throw new NotFoundError(`No product with ${item.product}`)
       }
       dbProduct.inventory -=item.amount
+      if(dbProduct.inventory === 0){
+        const newNotification = new Notification({
+          type: "outofStock",
+          from: req.user.userId,
+          to:userId,
+          message:`The item ${dbProduct.name} is Out of Stock....`
+          
+      });
+      await newNotification.save()
+
+      }
       await dbProduct.save()
       const{name,price,image,_id}=dbProduct
      const singleProductItem={
@@ -45,6 +58,14 @@ export const createOrder =async(req,res)=>{
 orderItems=[...orderItems,singleProductItem]
 
 subtotal +=item.amount*price
+
+  const sale=new Sale({
+    sales_item:_id,
+    numOfItems:item.amount,
+    total:price*item.amount
+  })
+
+  await sale.save()
 
     }
 
@@ -60,8 +81,7 @@ subtotal +=item.amount*price
         
         user: req.user.userId,
       }); 
-      const userIdString = '664397dd5059a25a98080c1c';
-      const userId =new mongoose.Types.ObjectId(userIdString);
+    
       const newNotification = new Notification({
         type: "order",
         from: req.user.userId,
@@ -103,6 +123,16 @@ export const updateOrder =async(req,res)=>{
 
 
 export const getCurrentUserOrders=async(req,res)=>{
-  const orders=await Order.find({user:req.user.userId})
-  res.status(StatusCodes.OK).json({orders})
+ 
+  const page=Number(req.query.page)||1
+const limit=Number(req.query.limit)||5
+const skip=(page-1)*limit 
+const orders=await Order.find({user:req.user.userId}).populate("user").skip(skip).limit(limit)
+ 
+   
+const totalOrders=await Order.countDocuments({user:req.user.userId})
+
+const numOfPages=Math.ceil(totalOrders/limit)
+
+  res.status(StatusCodes.OK).json({orders,totalOrders,numOfPages,currentPage:page})
 }

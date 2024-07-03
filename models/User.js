@@ -12,6 +12,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'my city',
   },
+    avatar:{
+      type: String,
+    },
+  
   role: {
     type: String,
     enum: ['user', 'admin'],
