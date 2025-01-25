@@ -1,33 +1,48 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FeaturedProducts, Hero } from '../components'
 import { customFetch } from '../utils';
+import { toast } from 'react-toastify';
+import { useLoaderData } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useFilterContext } from '../context/FilterContext';
+import FeaturedProductsGrid from '../components/FeaturedProductsGrid';
 
 
-const url = '/products';
+export const loader=async ({ request }) => {
 
-const featuredProductsQuery = {
-  queryKey: ['featuredProducts'],
-  queryFn: () => customFetch.get(url),
-};
+  try {
+   const response=await customFetch.get('/products')
+   const{products, categories, companies}=response.data
+   return{products,categories,companies}
+  } catch (error) {
+   toast.error('Something went wrong');
+   return null
+  }
+ }
 
 
-export const loader=(queryClient)=>async()=>{
-  const response=await queryClient.ensureQueryData(featuredProductsQuery);
- 
-  const items = response?.data?.products
-  
-const featuredProducts=items?.filter((item)=>{
-return item?.featured === true
-})
-const products=featuredProducts?.slice(0,6)
 
-  return {products}
-}
+
 const Landing = () => {
+  
+  const{products}=useLoaderData()
+   const{getAllProducts}=useFilterContext()
+
+
+  useEffect(()=>{
+    if(products.length>0){
+      getAllProducts(products)
+    
+    }
+   
+  },[products])
+
+  
+  
   return (
     <>
     <Hero/>
-    <FeaturedProducts/>
+    <FeaturedProducts/> 
     </>
   )
 }

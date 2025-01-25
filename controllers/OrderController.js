@@ -12,6 +12,7 @@ import Sale from "../models/Sales.js";
 
 export const createOrder =async(req,res)=>{
     
+  
     
    const{cartItems,totalShippingCost:shippingFee,tax}=req.body
   
@@ -127,7 +128,7 @@ export const getCurrentUserOrders=async(req,res)=>{
   const page=Number(req.query.page)||1
 const limit=Number(req.query.limit)||5
 const skip=(page-1)*limit 
-const orders=await Order.find({user:req.user.userId}).populate("user").skip(skip).limit(limit)
+const orders=await Order.find({user:req.user.userId}).populate("user").sort({ createdAt: -1 }).skip(skip).limit(limit)
  
    
 const totalOrders=await Order.countDocuments({user:req.user.userId})

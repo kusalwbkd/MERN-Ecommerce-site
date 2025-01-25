@@ -1,5 +1,11 @@
 import { Outlet, useNavigation } from 'react-router-dom';
 import { Header, Loading, Navbar } from '../components';
+import { toast } from 'react-toastify';
+import Footer from '../components/Footer';
+
+
+
+
 
 const HomeLayout = () => {
   const navigation = useNavigation();
@@ -16,7 +22,7 @@ const HomeLayout = () => {
       <Outlet />
     </section>
     )}
-   
+  
     </>
   );
 };

@@ -6,14 +6,17 @@ import './index.css'
 
 import { ToastContainer } from 'react-toastify';
 
-import{Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import { store } from './store.js';
+import { FilterProvider } from './context/FilterContext.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-  <App />
+    <FilterProvider>
+    <App />
     <ToastContainer position='top-center' />
+    </FilterProvider>
   </Provider>
-    
-  
+
+
 )

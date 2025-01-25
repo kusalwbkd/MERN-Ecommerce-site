@@ -4,7 +4,7 @@ import { formatPrice } from '../utils'
 
 const CartTotals = () => {
 
-    const{cartTotal,orderTotal,tax,totalShippingCost}=useSelector((state)=>state.cartState)
+    const{cartTotal,orderTotal,tax,shipping}=useSelector((state)=>state.cartState)
   
   return (
     <div className='card bg-base-200'>
@@ -16,7 +16,7 @@ const CartTotals = () => {
 
         <p className='flex justify-between text-sm border-b border-base-300 pb-2'>
           <span>Shipping</span>
-          <span className='font-medium'>{formatPrice(totalShippingCost)}</span>
+          <span className='font-medium'>{formatPrice(shipping)}</span>
         </p>
 
         <p className='flex justify-between text-sm border-b border-base-300 pb-2'>

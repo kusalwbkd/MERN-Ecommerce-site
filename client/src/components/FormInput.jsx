@@ -1,4 +1,4 @@
-const FormInput = ({ label, name, type, defaultValue, size,required }) => {
+const FormInput = ({ label, name, type, defaultValue, size,value,onChange}) => {
   
   return (
     <div className='form-control'>
@@ -10,7 +10,8 @@ const FormInput = ({ label, name, type, defaultValue, size,required }) => {
         name={name}
         defaultValue={defaultValue}
         className={`input input-bordered  ${size} max-w-96`}
-      
+        value={value}
+        onChange={onChange }
         
       />
     </div>

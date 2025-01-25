@@ -13,7 +13,7 @@ export const action=(store)=>async({request})=>{
     const formData=await request.formData()
     const{name,address}=Object.fromEntries(formData)
     const user = store.getState().userState.user;
-    const { cartItems, orderTotal, numItemsInCart,totalShippingCost,tax } =store.getState().cartState;
+    const { cartItems, orderTotal, numItemsInCart,shipping:totalShippingCost,tax } =store.getState().cartState;
     
     const info = {
         name,
