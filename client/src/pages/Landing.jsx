@@ -26,12 +26,13 @@ export const loader=async ({ request }) => {
 const Landing = () => {
   
   const{products}=useLoaderData()
-   const{getAllProducts}=useFilterContext()
+   const{getAllProducts,getFeaturedProducts}=useFilterContext()
 
 
   useEffect(()=>{
     if(products.length>0){
       getAllProducts(products)
+      getFeaturedProducts()
     
     }
    

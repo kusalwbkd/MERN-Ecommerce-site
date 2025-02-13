@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom'
 import { formatPrice } from '../utils'
 
 const FeaturedProductsGrid = () => {
-    useEffect(()=>{
-        getFeaturedProducts()
-     },[])
-    const{featured_products:products,getFeaturedProducts}=useFilterContext()
+  const{featured_products:products}=useFilterContext()
+
+   
   
     
   return (
