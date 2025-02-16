@@ -60,26 +60,26 @@ const filter_reducer = (state, action) => {
         const { sort, filtered_products, totalProducts } = state
         let tempProducts = []
         if (sort === 'price-lowest') {
-            tempProducts = filtered_products.sort((a, b) => a.price - b.price)
+            tempProducts = [...filtered_products].sort((a, b) => a.price - b.price)
 
         }
         if (sort === 'price-highest') {
-            tempProducts = filtered_products.sort((a, b) => b.price - a.price)
+            tempProducts = [...filtered_products].sort((a, b) => b.price - a.price)
 
         }
 
         if (sort === 'a-z') {
-            tempProducts = filtered_products.sort((a, b) => a.name.localeCompare(b.name))
+            tempProducts = [...filtered_products].sort((a, b) => a.name.localeCompare(b.name))
 
         }
 
         if (sort === 'z-a') {
-            tempProducts = filtered_products.sort((a, b) => b.name.localeCompare(a.name))
+            tempProducts = [...filtered_products].sort((a, b) => b.name.localeCompare(a.name))
 
         }
 
         if (sort === 'latest') {
-            tempProducts = [...state.all_products]
+            tempProducts = [...filtered_products]
 
         }
 

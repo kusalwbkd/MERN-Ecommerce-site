@@ -44,21 +44,19 @@ export const FilterProvider = ({ children }) => {
         dispatch({ type: GET_FEATURED_PRODUCTS})
 
     }
-   /*  useEffect(() => {
-     
-        dispatch({ type: SORT_PRODUCTS })
-        //dispatch({ type: FILTER_PRODUCTS })
-    }, [state.sort]) */
- 
-    /* useEffect(() => {
-        dispatch({ type: FILTER_PRODUCTS })
-     
-    }, [ state.filters])  */
     useEffect(() => {
-        dispatch({ type: FILTER_PRODUCTS });
-        dispatch({ type: SORT_PRODUCTS });
-    }, [state.filters, state.sort]);
+      
+            dispatch({ type: FILTER_PRODUCTS });
+            dispatch({ type: SORT_PRODUCTS });
+        
+    }, [ state.sort, state.filters]);
     
+    
+   /*   useEffect(() => {
+        dispatch({ type: FILTER_PRODUCTS })
+        dispatch({ type: SORT_PRODUCTS })
+       
+    }, [state.sort,state.filters])  */
 
     const updateSort = (e) => {
         const value = e.target.value

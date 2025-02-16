@@ -22,7 +22,7 @@ const Products = () => {
   const{products}=useLoaderData()
   const{getAllProducts}=useFilterContext()
   useEffect(()=>{
-    if(products.length>0){
+    if(products?.length>0){
     getAllProducts(products)
     }
 
